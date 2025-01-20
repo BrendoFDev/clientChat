@@ -1,54 +1,109 @@
-body{
-    margin:0;
-    font-family: Arial, Helvetica, sans-serif;
+/* Estilos gerais da página */
+body {
+    font-family: Arial, sans-serif;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    width: 100vw;
+    margin: 0;
+    background-color: #f4f4f4;
 }
 
-div.box_out_grid{
-    margin:10px;
-    border-radius: 10px;
-    border:2px solid black;
-}
-
-div.box_inside_grid{
-    padding: 10px;
-    border:2px solid black;
-    border-radius: 10px;
-    margin:10px;
-}
-div.box_room{
-    border:2px solid black;
-    padding: 10px;
+.box-body {
     display: flex;
-    flex-direction: row;
     justify-content: center;
-    gap:10px;
+    align-items: center;
+    height: 100%;
+    width: 100%;
 }
 
-div.box_messages{
-    height: 700px;
-    width: 500px;
-}
-
-div.box_textbar
-{
-    border:1px solid black;
+.box_out_grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    gap: 20px;
+    width: 100%;
+    max-width: 600px;
+    background: #fff;
+    padding: 20px;
     border-radius: 10px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    padding: 10px;
-    gap:10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-input#message{
-    width: 300px;
-    font-size: 15px;
-    border:none;
+.box_inside_grid {
+    display: flex;
+    flex-direction: column;
+}
+
+.box_room, .box_messages, .box_textbar {
+    margin-bottom: 20px;
+}
+
+.box_messages {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    max-height: 400px;
+    width: 100%;
+    gap: 10px;
+    padding: 10px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fafafa;
+}
+
+div.message {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #fff;
+    width: fit-content;
+    max-width: 80%;
+}
+
+.sender {
+    font-weight: bold;
+    color: #333;
+}
+
+.message_data {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #555;
+}
+
+.box_textbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+input#messageInput {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
     outline: none;
+}
+
+button {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+input, button {
+    font-size: 16px;
 }

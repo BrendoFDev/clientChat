@@ -5,25 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <link rel="stylesheet" href="./css/index.css">
-    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="js/index.js"></script>
-    <title>chat</title>
+    <title>Chat ao Vivo</title>
 </head>
 <body>
     <div class="box-body">
         <div class="box_out_grid">
             <div class="box_inside_grid">
                 <div class="box_room">
-                    <label id="room">Sala</label>
-                    <input type="text" name="roomName" id="roomName" required>
-                    <button type="button" id="joinRoom">Entrar</button>
+                    <label for="userName">Seu nome</label>
+                    <input type="text" name="userName" id="userName" required placeholder="Digite seu nome">
+
+                    <label for="roomName">Sala</label>
+                    <input type="text" name="roomName" id="roomName" required placeholder="Digite o nome da sala">
+                    <button type="button" id="bttJoinRoom">Entrar</button>
                 </div>
-                <div class="box_messages">
-                    
+                <div class="box_messages" id="box_messages">
+                    <!-- As mensagens serão exibidas aqui -->
                 </div>
                 <div class="box_textbar">
-                    <input type="text" name="message" id="message">
+                    <input type="text" name="messageInput" id="messageInput" placeholder="Digite uma mensagem">
                     <button type="button" id="bttSendMessage">Enviar</button>
                 </div>
             </div>
