@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="./css/index.css">
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/index.js"></script>
+    <title>chat</title>
+</head>
+<body>
+    <div class="box-body">
+        <div class="box_out_grid">
+            <div class="box_inside_grid">
+                <div class="box_room">
+                    <label id="room">Sala</label>
+                    <input type="text" name="roomName" id="roomName" required>
+                    <button type="button" id="joinRoom">Entrar</button>
+                </div>
+                <div class="box_messages">
+                    
+                </div>
+                <div class="box_textbar">
+                    <input type="text" name="message" id="message">
+                    <button type="button" id="bttSendMessage">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
