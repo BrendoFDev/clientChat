@@ -11,48 +11,77 @@ body {
 
 .box_body {
     background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    width: 320px;
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 26px;
+    color: #333;
 }
 
 .form {
     display: flex;
     flex-direction: column;
+    gap: 15px;
 }
 
 label {
-    margin-bottom: 5px;
+    text-align: left;
+    font-size: 14px;
     font-weight: bold;
-    color: #333;
+    color: #444;
 }
 
 input {
-    margin-bottom: 15px;
-    padding: 10px;
+    padding: 12px;
     font-size: 16px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 6px;
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 input:focus {
     outline: none;
     border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    box-shadow: 0 0 6px rgba(0, 123, 255, 0.5);
 }
 
 button {
     background-color: #007bff;
     color: white;
-    padding: 10px;
+    padding: 12px;
     font-size: 16px;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
 button:hover {
     background-color: #0056b3;
+}
+
+.box_cadastrar {
+    margin-top: 20px;
+}
+
+.box_cadastrar button {
+    background-color: #6c757d;
+    color: white;
+    padding: 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.box_cadastrar button:hover {
+    background-color: #5a6268;
 }

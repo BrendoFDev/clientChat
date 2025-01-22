@@ -8,7 +8,8 @@ $(document).ready(function() {
 
     const socket = io("http://192.168.0.75:3000", {
         transports: ["websocket"],
-        upgrade: false
+        upgrade: false,
+        withCredentials: true,
     });
     
     bttjoinRoom.click((event) => {
