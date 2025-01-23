@@ -1,3 +1,5 @@
+const axios = require('axios');
+
 exports.getLogin = (req,res)=>{
    try {
         res.render('login');

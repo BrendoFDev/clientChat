@@ -1,3 +1,4 @@
+
 $(document).ready(function() { 
     const bttjoinRoom = $('#bttJoinRoom');
     const bttSendMessage = $('#bttSendMessage');
@@ -6,12 +7,20 @@ $(document).ready(function() {
     const messageBox = $('#box_messages');
     const roomName = $('#roomName');
 
-    const socket = io("http://192.168.0.75:3000", {
+    const socket =  io("http://192.168.0.75:3000", {
         transports: ["websocket"],
         upgrade: false,
         withCredentials: true,
     });
     
+    const currentUser = localStorage.getItem('user');
+    
+    socket.emit('connection', currentUser);
+
+    socket.on('disconnect', ()=>{
+        window.location.href = '/login'
+   });
+
     bttjoinRoom.click((event) => {
         joinRoom();
     });
