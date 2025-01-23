@@ -1,4 +1,7 @@
 $(document).ready(function(){
+
+    axios.defaults.withCredentials = true;
+
     const userEmail = $('#userEmail');
     const userPassword = $('#userPassword');
     const bttLogin = $('#bttLogin');
