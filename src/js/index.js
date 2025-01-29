@@ -13,14 +13,20 @@ $(document).ready(function() {
         withCredentials: true,
     });
     
-    const currentUser = localStorage.getItem('user');
+    async function authenticateUser() {
+        const response = await axios.post('http://192.168.0.75:3000/acess/authenticate',{
+            user: localStorage.getItem('user')
+         });
+     
+         if(response.data.logged === true)
+               res.render('index')
+         else(response.data.logged == false)
+              res.render('login')
+    }
+   
     
-    socket.emit('connection', currentUser);
-
-    socket.on('disconnect', ()=>{
-        window.location.href = '/login'
-   });
-
+   
+    
     bttjoinRoom.click((event) => {
         joinRoom();
     });
