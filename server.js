@@ -4,11 +4,11 @@ const path = require('path');
 const router = require('./router')
 const cors = require('cors');
 const axios = require('axios');
+const bodyParser = require('body-parser')
 
 const port = 9091;
 
 app.use(express.static(path.join(__dirname, 'src')));
-
 app.use(express.urlencoded({extended:true}));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname,'src','views'));

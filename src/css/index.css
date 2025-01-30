@@ -1,109 +1,220 @@
 /* Estilos gerais da página */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #f4f4f4;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: #333;
 }
 
 .box-body {
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100%;
-    width: 100%;
+    align-items: flex-start;
+    height: 90vh;
+    width: 90%;
+    max-width: 1200px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.opened_rooms {
+    width: 250px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-right: 1px solid #e0e0e0;
+    overflow-y: auto;
+}
+
+.opened_rooms h3 {
+    margin: 0 0 15px;
+    font-size: 18px;
+    color: #333;
 }
 
 .box_out_grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr auto;
-    gap: 20px;
-    width: 100%;
-    max-width: 600px;
-    background: #fff;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    gap: 20px;
 }
 
 .box_inside_grid {
     display: flex;
     flex-direction: column;
+    gap: 20px;
 }
 
-.box_room, .box_messages, .box_textbar {
-    margin-bottom: 20px;
-}
-
-.box_messages {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    max-height: 400px;
-    width: 100%;
-    gap: 10px;
-    padding: 10px;
-    overflow-y: auto;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #fafafa;
-}
-
-div.message {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 10px;
-    background-color: #fff;
-    width: fit-content;
-    max-width: 80%;
-}
-
-.sender {
-    font-weight: bold;
-    color: #333;
-}
-
-.message_data {
-    margin-top: 5px;
-    font-size: 14px;
-    color: #555;
-}
-
-.box_textbar {
+.box_room {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-input#messageInput {
-    width: 100%;
-    padding: 10px;
+.box_room label {
     font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    outline: none;
+    font-weight: 600;
+    color: #333;
 }
 
-button {
+.box_room input {
+    flex: 1;
     padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.box_room input:focus {
+    border-color: #007bff;
+}
+
+.box_room button {
+    padding: 10px 20px;
     background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-button:hover {
+.box_room button:hover {
     background-color: #0056b3;
 }
 
-input, button {
+.box_messages {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    overflow-y: auto;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.message {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 15px;
+    background: #f1f3f4;
+    border-radius: 8px;
+    max-width: 70%;
+    word-wrap: break-word;
+    animation: fadeIn 0.3s ease;
+}
+
+.message.sent {
+    align-self: flex-end;
+    background: #007bff;
+    color: white;
+}
+
+.message.received {
+    align-self: flex-start;
+    background: #e9ecef;
+    color: #333;
+}
+
+.sender {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.message_data {
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.box_textbar {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-top: 1px solid #e0e0e0;
+    border-radius: 0 0 10px 10px;
+}
+
+.box_textbar input {
+    flex: 1;
+    padding: 10px;
     font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.box_textbar input:focus {
+    border-color: #007bff;
+}
+
+.box_textbar button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.box_textbar button:hover {
+    background-color: #0056b3;
+}
+
+/* Animações */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .box-body {
+        flex-direction: column;
+        height: auto;
+        padding: 10px;
+    }
+
+    .opened_rooms {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .box_out_grid {
+        padding: 10px;
+    }
+
+    .box_room {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .box_room button {
+        width: 100%;
+    }
+
+    .box_messages {
+        max-height: 300px;
+    }
 }

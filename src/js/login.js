@@ -1,3 +1,4 @@
+
 $(document).ready(function(){
     const userEmail = $('#userEmail');
     const userPassword = $('#userPassword');
@@ -10,36 +11,29 @@ $(document).ready(function(){
     });
 
     async function login(){
-           
-        
-
-        const response = await axios.post('http://192.168.0.75:3000/user/login',{
-            Email: userEmail.val(),
-            Password: userPassword.val()
-        },{
-            withCredentials:true,
-        });
-        const socket =  io("http://192.168.0.75:3000", {
-            transports: ["websocket"],
-            upgrade: false,
-            withCredentials: true,
-        });
-        //socket.emit('connection', {email:userEmail.val(),password:userPassword.val()});
-      
-        processResponse(response);
+        try{
+                
+            const response = await axios.post('http://192.168.0.75:3000/user/login',{
+                Email: userEmail.val(),
+                Password: userPassword.val()
+            });
+            processResponse(response);
+            
+        }
+        catch(error){
+            alert("Email ou senha incorretos!")
+        }
     }
 
-    function processResponse(response){
-        if(response.status === 200){
+    function processResponse(response) {
+        if (response.status === 200) {
+            const token = response.data.token;
+            const user = response.data.user;
+            localStorage.setItem('token', token);
+            localStorage.setItem('user', JSON.stringify(user));
 
-            const userData = response.data.user; 
-            localStorage.setItem('user', JSON.stringify(userData)); 
-          
             window.location.href = '/index'
-        }
-        else
-        {
-            alert("Senha ou usuário estão incorretos!");
+
         }
     }
 

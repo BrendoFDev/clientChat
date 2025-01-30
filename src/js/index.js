@@ -2,30 +2,36 @@
 $(document).ready(function() { 
     const bttjoinRoom = $('#bttJoinRoom');
     const bttSendMessage = $('#bttSendMessage');
-    const userName = $('#userName');
     const messageInput = $('#messageInput');
     const messageBox = $('#box_messages');
     const roomName = $('#roomName');
+    const token = localStorage.getItem('token');
+    const currentUser = JSON.parse(localStorage.getItem('user'));
 
     const socket =  io("http://192.168.0.75:3000", {
         transports: ["websocket"],
-        upgrade: false,
-        withCredentials: true,
+        auth: token,
+        credentials:true
     });
     
     async function authenticateUser() {
-        const response = await axios.post('http://192.168.0.75:3000/acess/authenticate',{
-            user: localStorage.getItem('user')
-         });
-     
-         if(response.data.logged === true)
-               res.render('index')
-         else(response.data.logged == false)
-              res.render('login')
+        try{
+
+            const response = await axios.post('http://192.168.0.75:3000/acess/authenticate', {
+                token:  token
+            });
+            
+            console.log(response.data.logged)
+            if(!response.data.logged)
+                window.location.href = '/login';
+            
+        }
+        catch(error){
+            window.location.href = '/login';
+        }
     }
    
-    
-   
+    authenticateUser();
     
     bttjoinRoom.click((event) => {
         joinRoom();
@@ -50,10 +56,10 @@ $(document).ready(function() {
 
         if(messageInput.val() && userName.val())
             socket.emit('private_message', {
-        roomId: roomName.val(),
-        message: messageInput.val(),
-        sender: userName.val()
-    });
+                roomId: roomName.val(),
+                message: messageInput.val(),
+                sender: currentUser.name.val()
+            });
 
         messageInput.val('');
 
