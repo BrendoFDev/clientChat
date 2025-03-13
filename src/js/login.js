@@ -13,7 +13,7 @@ $(document).ready(function(){
     async function login(){
         try{
                 
-            const response = await axios.post('http://192.168.0.75:3000/user/login',{
+            const response = await axios.post('http://localhost:3000/user/login',{
                 Email: userEmail.val(),
                 Password: userPassword.val()
             });
@@ -28,8 +28,10 @@ $(document).ready(function(){
     function processResponse(response) {
         if (response.status === 200) {
             const token = response.data.token;
+            const refresh = response.data.refresh;
             const user = response.data.user;
             localStorage.setItem('token', token);
+            localStorage.setItem('token', refresh);
             localStorage.setItem('user', JSON.stringify(user));
 
             window.location.href = '/index'

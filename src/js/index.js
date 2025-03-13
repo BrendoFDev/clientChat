@@ -6,19 +6,23 @@ $(document).ready(function() {
     const messageBox = $('#box_messages');
     const roomName = $('#roomName');
     const token = localStorage.getItem('token');
+    const refresh = localStorage.getItem('refresh');
     const currentUser = JSON.parse(localStorage.getItem('user'));
-
-    const socket =  io("http://192.168.0.75:3000", {
+    
+    const socket =  io('http://localhost:3000', {
         transports: ["websocket"],
-        auth: token,
-        credentials:true
+        auth: token
     });
     
     async function authenticateUser() {
         try{
-
-            const response = await axios.post('http://192.168.0.75:3000/acess/authenticate', {
-                token:  token
+            const response = await axios.post(`http://localhost:3000/access/authenticate`, {
+           
+            },{
+                headers:{
+                    token,
+                    refresh
+                }
             });
             
             console.log(response.data.logged)

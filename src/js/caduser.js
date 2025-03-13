@@ -13,7 +13,7 @@ $(document).ready(function() {
 
     async function registerNewUser(){
         try{
-            const response = await axios.post('http://192.168.0.75:3000/user/createUser',{
+            const response = await axios.post('http://localhost:3000/user/createUser',{
                     Name: userName.val(),
                     Email: userEmail.val(),
                     Password: userPassword.val()
