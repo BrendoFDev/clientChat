@@ -17,6 +17,7 @@ $(document).ready(function(){
                 Email: userEmail.val(),
                 Password: userPassword.val()
             });
+            
             processResponse(response);
             
         }
@@ -26,13 +27,14 @@ $(document).ready(function(){
     }
 
     function processResponse(response) {
+
         if (response.status === 200) {
+
             const token = response.data.token;
             const refresh = response.data.refresh;
-            const user = response.data.user;
+
             localStorage.setItem('token', token);
-            localStorage.setItem('token', refresh);
-            localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('refresh', refresh);
 
             window.location.href = '/index'
 
