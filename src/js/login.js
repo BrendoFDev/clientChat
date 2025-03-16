@@ -14,8 +14,8 @@ $(document).ready(function(){
         try{
                 
             const response = await axios.post('http://localhost:3000/user/login',{
-                Email: userEmail.val(),
-                Password: userPassword.val()
+                email: userEmail.val(),
+                password: userPassword.val()
             });
             
             processResponse(response);
@@ -29,7 +29,6 @@ $(document).ready(function(){
     function processResponse(response) {
 
         if (response.status === 200) {
-
             const token = response.data.token;
             const refresh = response.data.refresh;
 

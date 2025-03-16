@@ -4,22 +4,26 @@ $(document).ready(function () {
     const messageInput = $('#messageInput');
     const messageBox = $('#box_messages');
     const roomName = $('#roomName');
-
+    let socket = null;
 
     const currentUser = JSON.parse(localStorage.getItem('user'));
 
-    const socket = io('http://localhost:3000', {
-        transports: ["websocket"],
-        auth: token
-    });
+    (function connectSocket(){
+        // const token = localStorage.getItem('token');
+
+        socket = io('http://localhost:3000', {
+            transports: ["websocket"]
+        });
+    }());
 
     (async function authenticateUser() {
         try {
-
             const token = localStorage.getItem('token');
-            if (!token) handleLoginRedirect();
-            const response = fetchWithAuth('/access/authenticate', token);
 
+            if (!token) handleLoginRedirect();
+
+            const response = await fetchWithAuth('/access/authenticate', token);
+            
             if (response?.data?.logged) return;
 
             let newAccessToken = await tryRefreshAccessToken();
@@ -36,7 +40,6 @@ $(document).ready(function () {
 
     async function tryRefreshAccessToken() {
         try {
-
             const refresh = localStorage.getItem('refresh');
             if (!refresh) return null
 
@@ -75,18 +78,13 @@ $(document).ready(function () {
 
         event.preventDefault();
         let message = messageInput.val().trim();
-        let userName = currentUser.name.val();
+        let userName = currentUser.name;
         let roomId = roomName.val().trim();
-
+        
         if ( message && userName && roomId)
+            socket.emit('private_message', { roomId, message, userName });
 
-            socket.emit('private_message', {
-                roomId: roomId,
-                message: message,
-                sender: userName,
-            });
-
-        messageInput.val('');
+        messageInput.val('') ;
 
     }
 
@@ -95,18 +93,21 @@ $(document).ready(function () {
     });
 
     function showMessageInScreen(userName, message) {
-        messageBox.append(
-            `
+        const messageElement = $(`
             <div class="message">
             <div class="sender">
-                <label>${userName}</label>
+                <span></span>
             </div>
             <div class="message_data">
-                ${message}
+                <span></span>
             </div>
             </div>
             `
         );
-        console.log('plotado')
+
+        messageElement.find('div.sender span').text(userName);
+        messageElement.find('div.message_data span').text(message);
+
+        messageBox.append(messageElement)
     }
 });

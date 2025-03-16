@@ -1,3 +1,4 @@
+
 $(document).ready(function() { 
 
     const bttRegister = $('#bttCadastrar');
@@ -13,26 +14,17 @@ $(document).ready(function() {
 
     async function registerNewUser(){
         try{
-            const response = await axios.post('http://localhost:3000/user/createUser',{
-                    Name: userName.val(),
-                    Email: userEmail.val(),
-                    Password: userPassword.val()
+            const request = await axios.post('http://localhost:3000/user/createUser',{
+                    name: userName.val(),
+                    email: userEmail.val(),
+                    password: userPassword.val()
             });
 
-           processResponse(response);
-
-        }catch(error){
-            console.log("erro ocorreu");
-        }
-    }
-
-    function processResponse(response){
-        if(response.status === 200){
-            alert(response.data.message)
+            alert(request.data.message)
             window.location.href = './login'
-        }
-        if(response.status === 201){
-            alert(response.data.message)
+
+        }catch(err){
+            alert(err.response.data.message)
             clearFields();
         }
     }
