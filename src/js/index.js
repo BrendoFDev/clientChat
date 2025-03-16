@@ -1,6 +1,10 @@
 $(document).ready(function () {
     const bttjoinRoom = $('#bttJoinRoom');
     const bttSendMessage = $('#bttSendMessage');
+    const bttNewRoom = $('#bttNewRoom')
+
+    const formNewRoom = $('#box_room');
+
     const messageInput = $('#messageInput');
     const messageBox = $('#box_messages');
     const roomName = $('#roomName');
@@ -110,4 +114,24 @@ $(document).ready(function () {
 
         messageBox.append(messageElement)
     }
+
+
+    bttNewRoom.on('click',showNewRoomFormInDisplay);
+
+    function showNewRoomFormInDisplay(){
+        if (formNewRoom.is(':visible')) {
+          
+            formNewRoom.css('animation', 'fadeOutRoomForm 0.3s ease forwards');
+            setTimeout(function() {
+                formNewRoom.hide();
+            }, 300); 
+
+        } else {
+            
+            formNewRoom.show();
+            formNewRoom.css('animation', 'fadeInRoomForm 0.3s ease');
+        }
+    }
+
 });
+

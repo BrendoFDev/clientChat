@@ -14,17 +14,16 @@
 </head>
 <body>
     <div class="box-body">
-        <div class="opened_rooms" id="opened_rooms">
-            <!-- aqui irão aparecer as rooms do banco -->
-        </div>
+       <%- include('includes/OpenedRooms') -%>
+
         <div class="box_out_grid">
             <div class="box_inside_grid">
-                <div class="box_room">
-                    
-                    <label for="roomName">Sala</label>
-                    <input type="text" name="roomName" id="roomName" required placeholder="Digite o nome da sala">
-                    <button type="button" id="bttJoinRoom">Entrar</button>
+
+                <div class="box_buttons">
+                    <button id="bttNewRoom" type="button">Nova Sala</button>
+                    <%- include('includes/RoomForm') -%>
                 </div>
+
                 <div class="box_messages" id="box_messages">
                     <!-- As mensagens serão exibidas aqui -->
                 </div>
