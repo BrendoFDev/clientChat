@@ -13,8 +13,6 @@ $(document).ready(function () {
     const currentUser = JSON.parse(localStorage.getItem('user'));
 
     (function connectSocket(){
-        // const token = localStorage.getItem('token');
-
         socket = io('http://localhost:3000', {
             transports: ["websocket"]
         });
@@ -66,15 +64,43 @@ $(document).ready(function () {
     }
 
 
-    bttjoinRoom.click(joinRoom);
+    bttjoinRoom.on("click", joinRoom);
 
     function joinRoom() {
         const roomId = roomName.val().trim();
+        const sender = currentUser.name;
+        const email = currentUser.email;
 
         if (!roomId) return alert("O nome da sala não pode estar vazio!");
 
-        socket.emit("join_private_room", { roomId });
+        socket.emit("join_private_room", { roomId, sender, email});
+        roomName.val('');
     }
+
+    socket.on("joined_in_room", (message)=> {
+        showJoinRoom(message);
+        showNewRoomFormInDisplay();
+    });
+
+    function showJoinRoom(message) {
+
+        const messageElement = $(`
+            <div class="message">
+                <div class="message_data">
+                    <span></span>
+                </div>
+            </div>
+            `
+        );
+
+        messageElement.find('div.message_data  span').text(message);
+        messageBox.append(messageElement);
+    }
+
+    socket.on("room_already_saved", (message)=>{
+        alert(message);
+        showNewRoomFormInDisplay();
+    })
 
     bttSendMessage.click(sendMessage);
 
@@ -82,35 +108,45 @@ $(document).ready(function () {
 
         event.preventDefault();
         let message = messageInput.val().trim();
-        let userName = currentUser.name;
+        let sender = currentUser.name;
         let roomId = roomName.val().trim();
-        
-        if ( message && userName && roomId)
-            socket.emit('private_message', { roomId, message, userName });
+        let time = new Date().toLocaleTimeString();
+        let date = new Date().toLocaleDateString();
+
+        if ( message && sender && roomId)
+            socket.emit('private_message', { roomId, message, sender, date, time});
 
         messageInput.val('') ;
 
     }
 
     socket.on('receive_message', (data) => {
-        showMessageInScreen(data.sender, data.message)
+        showMessageInScreen(data)
     });
 
-    function showMessageInScreen(userName, message) {
+    function showMessageInScreen(data) {
+
         const messageElement = $(`
             <div class="message">
-            <div class="sender">
-                <span></span>
-            </div>
-            <div class="message_data">
-                <span></span>
-            </div>
+                <div class="sender">
+                    <span></span>
+                </div>
+                <div class="message_data">
+                    <div class="content" >
+                        <span></span>
+                        <div class="time">
+                        <span></span>
+                        </div>
+                    </div>
+                </div>
             </div>
             `
         );
 
-        messageElement.find('div.sender span').text(userName);
-        messageElement.find('div.message_data span').text(message);
+        console.log(data)
+        messageElement.find('div.sender span').text(data.sender);
+        messageElement.find('div.message_data content span').text(data.message);
+        messageElement.find('div.message_data content time span').text(data.time);
 
         messageBox.append(messageElement)
     }
