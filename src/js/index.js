@@ -1,22 +1,69 @@
 $(document).ready(function () {
     const bttjoinRoom = $('#bttJoinRoom');
     const bttSendMessage = $('#bttSendMessage');
-    const bttNewRoom = $('#bttNewRoom')
-
+    const bttNewRoom = $('#bttNewRoom');
     const formNewRoom = $('#box_room');
-
     const messageInput = $('#messageInput');
     const messageBox = $('#box_messages');
     const roomName = $('#roomName');
+    const roomBox = $('#opened_rooms');
+    
     let socket = null;
 
     const currentUser = JSON.parse(localStorage.getItem('user'));
+    let currentRoom = null;
 
     (function connectSocket(){
         socket = io('http://localhost:3000', {
             transports: ["websocket"]
         });
     }());
+
+    socket.on("connect", () => {
+        const email = currentUser.email;
+        if (email) {
+            loadJoinedRooms(email)
+        }
+    });
+
+    function loadJoinedRooms(email){
+        socket.emit("restore_rooms", email);
+    }
+
+    socket.on("joined_rooms", (rooms)=>{
+        roomBox.find('.room').detach();
+        rooms.forEach((roomId)=>setRoom(roomId))
+    });
+
+    function setRoom(roomId){
+        const room = $(`
+            <div class="room" id="room">
+                <span class="roomId"></span>
+                <div class="lastMessage">
+                    <span></span>
+                </div>
+            </div>
+        `);
+
+        room.find('span.roomId').text(roomId);
+        roomBox.append(room);
+    }
+
+    roomBox.on('click','.room',(e)=>{
+        const roomId = $(e.target).closest('.room').find('span.roomId').text();
+        currentRoom = roomId;
+        socket.emit('load_room_messages', roomId);
+    });
+
+    socket.on('return_room_messages',(data)=>{
+        messageBox.find('.message').detach();
+        data.forEach((message) => showMessageInScreen(message));
+        scrollToBottom();
+    });
+
+    function scrollToBottom(){
+        messageBox.scrollTop(messageBox[0].scrollHeight);
+    }
 
     (async function authenticateUser() {
         try {
@@ -63,7 +110,6 @@ $(document).ready(function () {
         window.location.href = '/login'
     }
 
-
     bttjoinRoom.on("click", joinRoom);
 
     function joinRoom() {
@@ -79,17 +125,19 @@ $(document).ready(function () {
 
     socket.on("joined_in_room", (message)=> {
         showJoinRoom(message);
-        showNewRoomFormInDisplay();
+        toggleNewRoomForm();
+        const email = currentUser.email;
+        loadJoinedRooms(email);
     });
 
     function showJoinRoom(message) {
 
         const messageElement = $(`
-            <div class="message">
-                <div class="message_data">
-                    <span></span>
+                <div class="message">
+                    <div class="message_data">
+                        <span></span>
+                    </div>
                 </div>
-            </div>
             `
         );
 
@@ -99,17 +147,24 @@ $(document).ready(function () {
 
     socket.on("room_already_saved", (message)=>{
         alert(message);
-        showNewRoomFormInDisplay();
+        toggleNewRoomForm();
     })
 
-    bttSendMessage.click(sendMessage);
+    messageInput.on('keydown', (e)=>{
+        if(e.key == "Enter"){
+            sendMessage();
+        }
+    });
+
+    bttSendMessage.on("click",sendMessage);
 
     function sendMessage() {
 
         event.preventDefault();
         let message = messageInput.val().trim();
         let sender = currentUser.name;
-        let roomId = roomName.val().trim();
+        let roomId = currentRoom;
+
         let time = new Date().toLocaleTimeString();
         let date = new Date().toLocaleDateString();
 
@@ -142,19 +197,18 @@ $(document).ready(function () {
             </div>
             `
         );
-
-        console.log(data)
         messageElement.find('div.sender span').text(data.sender);
-        messageElement.find('div.message_data content span').text(data.message);
-        messageElement.find('div.message_data content time span').text(data.time);
+        messageElement.find('div.message_data .content span').text(data.message);
+        messageElement.find('div.message_data .content .time span').text(data.time);
 
         messageBox.append(messageElement)
+        scrollToBottom();
     }
 
 
-    bttNewRoom.on('click',showNewRoomFormInDisplay);
+    bttNewRoom.on('click',toggleNewRoomForm);
 
-    function showNewRoomFormInDisplay(){
+    function toggleNewRoomForm(){
         if (formNewRoom.is(':visible')) {
           
             formNewRoom.css('animation', 'fadeOutRoomForm 0.3s ease forwards');

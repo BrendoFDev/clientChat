@@ -14,6 +14,7 @@
 </head>
 <body>
     <div class="box-body">
+        
        <%- include('includes/OpenedRooms') -%>
 
         <div class="box_out_grid">
@@ -23,9 +24,10 @@
                     <button id="bttNewRoom" type="button">Nova Sala</button>
                     <%- include('includes/RoomForm') -%>
                 </div>
-
-                <div class="box_messages" id="box_messages">
-                    <!-- As mensagens serão exibidas aqui -->
+                <div class="messages">
+                    <div class="box_messages" id="box_messages">
+                        <!-- As mensagens serão exibidas aqui -->
+                    </div>
                 </div>
                 <div class="box_textbar">
                     <input type="text" name="messageInput" id="messageInput" placeholder="Digite uma mensagem">

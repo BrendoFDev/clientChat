@@ -24,18 +24,42 @@ body {
 }
 
 .opened_rooms {
+    gap:5px;
     width: 250px;
+    height: 100%;
     padding: 20px;
     background: #f8f9fa;
     border-right: 1px solid #e0e0e0;
     overflow-y: auto;
 }
 
-.opened_rooms h3 {
+.opened_rooms h3{
+    text-align: center;
+}
+
+.opened_rooms span {
     margin: 0 0 15px;
     font-size: 18px;
     color: #333;
 }
+
+.room{
+    margin: 5px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #007bff;
+    transition: 0.4s;
+    cursor: pointer;
+}
+
+.room:hover{
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.room .roomId{
+    color: white;
+}
+
 
 .box_out_grid {
     display: flex;
@@ -64,7 +88,6 @@ body {
     display: none; 
     animation: fadeInRoomForm 0.3s ease;
 }
-
 
 @keyframes fadeInRoomForm {
     from{
@@ -137,10 +160,13 @@ body {
     background-color: #0056b3;
 }
 
-.box_messages {
+.messages{
     flex: 1;
     display: flex;
     flex-direction: column;
+}
+
+.box_messages {
     gap: 10px;
     padding: 15px;
     background: #fff;
@@ -148,12 +174,14 @@ body {
     border-radius: 10px;
     overflow-y: auto;
     box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+    height: 500px;
 }
 
 .message {
     display: flex;
     flex-direction: column;
-    padding: 10px 15px;
+    padding: 10px;
+    margin:10px;
     background: #f1f3f4;
     border-radius: 8px;
     max-width: 70%;
@@ -262,6 +290,6 @@ body {
     }
 
     .box_messages {
-        max-height: 300px;
+        max-height: 400px;
     }
 }
