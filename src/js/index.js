@@ -5,39 +5,37 @@ $(document).ready(function () {
     const formNewRoom = $('#box_room');
     const messageInput = $('#messageInput');
     const messageBox = $('#box_messages');
-    const roomName = $('#roomName');
+    const roomInput = $('#roomName');
     const roomBox = $('#opened_rooms');
-    
+
     let socket = null;
 
     const currentUser = JSON.parse(localStorage.getItem('user'));
     let currentRoom = null;
 
-    (function connectSocket(){
-        socket = io('http://localhost:3000', {
+    (function connectSocket() {
+        socket = io('ws://192.168.0.4:3000', {
             transports: ["websocket"]
         });
     }());
 
     socket.on("connect", () => {
-        const email = currentUser.email;
-        if (email) {
-            loadJoinedRooms(email)
-        }
+        loadJoinedRooms()
     });
 
-    function loadJoinedRooms(email){
-        socket.emit("restore_rooms", email);
+    function loadJoinedRooms() {
+        socket.emit("restore_rooms", currentUser.id);
     }
 
-    socket.on("joined_rooms", (rooms)=>{
+    socket.on("joined_rooms", (rooms) => {
         roomBox.find('.room').detach();
-        rooms.forEach((roomId)=>setRoom(roomId))
+        rooms.forEach((room) => setRoom(room))
     });
 
-    function setRoom(roomId){
+    function setRoom(data) {
         const room = $(`
             <div class="room" id="room">
+                <span class=roomName></span>
                 <span class="roomId"></span>
                 <div class="lastMessage">
                     <span></span>
@@ -45,23 +43,24 @@ $(document).ready(function () {
             </div>
         `);
 
-        room.find('span.roomId').text(roomId);
+        room.find('span.roomName').text(data.name);
+        room.find('span.roomId').text(data.id);
         roomBox.append(room);
     }
 
-    roomBox.on('click','.room',(e)=>{
+    roomBox.on('click', '.room', (e) => {
         const roomId = $(e.target).closest('.room').find('span.roomId').text();
         currentRoom = roomId;
         socket.emit('load_room_messages', roomId);
     });
 
-    socket.on('return_room_messages',(data)=>{
+    socket.on('return_room_messages', (data) => {
         messageBox.find('.message').detach();
         data.forEach((message) => showMessageInScreen(message));
         scrollToBottom();
     });
 
-    function scrollToBottom(){
+    function scrollToBottom() {
         messageBox.scrollTop(messageBox[0].scrollHeight);
     }
 
@@ -72,7 +71,7 @@ $(document).ready(function () {
             if (!token) handleLoginRedirect();
 
             const response = await fetchWithAuth('/access/authenticate', token);
-            
+
             if (response?.data?.logged) return;
 
             let newAccessToken = await tryRefreshAccessToken();
@@ -103,7 +102,7 @@ $(document).ready(function () {
     }
 
     async function fetchWithAuth(url, auth) {
-        return await axios.post(`http://localhost:3000${url}`, {}, { headers: { Authorization: `Bearer ${auth}` } });
+        return await axios.post(`http://192.168.0.4:3000${url}`, {}, { headers: { Authorization: `Bearer ${auth}` } });
     }
 
     function handleLoginRedirect() {
@@ -113,21 +112,18 @@ $(document).ready(function () {
     bttjoinRoom.on("click", joinRoom);
 
     function joinRoom() {
-        const roomId = roomName.val().trim();
-        const sender = currentUser.name;
-        const email = currentUser.email;
+        const roomName = roomInput.val().trim();
+        const userId = currentUser.id;
+        if (!roomName) return alert("O nome da sala não pode estar vazio!");
 
-        if (!roomId) return alert("O nome da sala não pode estar vazio!");
-
-        socket.emit("join_private_room", { roomId, sender, email});
-        roomName.val('');
+        socket.emit("join_private_room", { roomName: roomName, userId });
+        roomInput.val('');
     }
 
-    socket.on("joined_in_room", (message)=> {
+    socket.on("joined_in_room", (message) => {
         showJoinRoom(message);
         toggleNewRoomForm();
-        const email = currentUser.email;
-        loadJoinedRooms(email);
+        loadJoinedRooms();
     });
 
     function showJoinRoom(message) {
@@ -145,38 +141,40 @@ $(document).ready(function () {
         messageBox.append(messageElement);
     }
 
-    socket.on("room_already_saved", (message)=>{
-        alert(message);
-        toggleNewRoomForm();
-    })
-
-    messageInput.on('keydown', (e)=>{
-        if(e.key == "Enter"){
+    messageInput.on('keydown', (e) => {
+        if (e.key == "Enter") {
             sendMessage();
         }
     });
 
-    bttSendMessage.on("click",sendMessage);
+    bttSendMessage.on("click", sendMessage);
 
     function sendMessage() {
+        try {
 
-        event.preventDefault();
-        let message = messageInput.val().trim();
-        let sender = currentUser.name;
-        let roomId = currentRoom;
+            event.preventDefault();
+            
+            let message = messageInput.val().trim();
+            let roomId = currentRoom;
 
-        let time = new Date().toLocaleTimeString();
-        let date = new Date().toLocaleDateString();
+            if (message && currentUser && roomId)
+                socket.emit('private_message', { roomId, message, currentUser});
 
-        if ( message && sender && roomId)
-            socket.emit('private_message', { roomId, message, sender, date, time});
-
-        messageInput.val('') ;
-
+            messageInput.val('');
+        }
+        catch (err) {
+            console.log(err);
+        }
     }
 
     socket.on('receive_message', (data) => {
-        showMessageInScreen(data)
+        try {
+            console.log(data)
+            showMessageInScreen(data)
+        }
+        catch (err) {
+            console.log(err);
+        }
     });
 
     function showMessageInScreen(data) {
@@ -197,7 +195,7 @@ $(document).ready(function () {
             </div>
             `
         );
-        messageElement.find('div.sender span').text(data.sender);
+        messageElement.find('div.sender span').text(data.senderName);
         messageElement.find('div.message_data .content span').text(data.message);
         messageElement.find('div.message_data .content .time span').text(data.time);
 
@@ -206,18 +204,18 @@ $(document).ready(function () {
     }
 
 
-    bttNewRoom.on('click',toggleNewRoomForm);
+    bttNewRoom.on('click', toggleNewRoomForm);
 
-    function toggleNewRoomForm(){
+    function toggleNewRoomForm() {
         if (formNewRoom.is(':visible')) {
-          
+
             formNewRoom.css('animation', 'fadeOutRoomForm 0.3s ease forwards');
-            setTimeout(function() {
+            setTimeout(function () {
                 formNewRoom.hide();
-            }, 300); 
+            }, 300);
 
         } else {
-            
+
             formNewRoom.show();
             formNewRoom.css('animation', 'fadeInRoomForm 0.3s ease');
         }
