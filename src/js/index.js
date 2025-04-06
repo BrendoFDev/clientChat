@@ -37,9 +37,6 @@ $(document).ready(function () {
             <div class="room" id="room">
                 <span class=roomName></span>
                 <span class="roomId"></span>
-                <div class="lastMessage">
-                    <span></span>
-                </div>
             </div>
         `);
 
@@ -153,12 +150,12 @@ $(document).ready(function () {
         try {
 
             event.preventDefault();
-            
+
             let message = messageInput.val().trim();
             let roomId = currentRoom;
 
             if (message && currentUser && roomId)
-                socket.emit('private_message', { roomId, message, currentUser});
+                socket.emit('private_message', { roomId, message, currentUser });
 
             messageInput.val('');
         }
@@ -220,6 +217,17 @@ $(document).ready(function () {
             formNewRoom.css('animation', 'fadeInRoomForm 0.3s ease');
         }
     }
+    $('.UserOptions').on("click", function () {
+        $(this).next('.options').toggle();
+    });
+
+    $(document).on("click", function (e) {
+        var target = e.target;
+        if (!$(target).is('.UserOptions') && !$(target).parents().is('.UserOptions')) {
+            $('.options').hide();
+        }
+    });
+
 
 });
 

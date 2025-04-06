@@ -1,40 +1,58 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <link rel="stylesheet" href="css/index.css">
+
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
     <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
     <script src="js/index.js"></script>
     <script type="module" src="../config/urlConfig.js"></script>
+
     <title>Chat ao Vivo</title>
 </head>
+
 <body>
     <div class="box-body">
-        
-       <%- include('includes/OpenedRooms') -%>
 
-        <div class="box_out_grid">
-            <div class="box_inside_grid">
+        <%- include('includes/OpenedRooms') -%>
 
-                <div class="box_buttons">
-                    <button id="bttNewRoom" type="button">Nova Sala</button>
-                    <%- include('includes/RoomForm') -%>
-                </div>
-                <div class="messages">
-                    <div class="box_messages" id="box_messages">
-                        <!-- As mensagens serão exibidas aqui -->
+            <div class="box_out_grid">
+                <div class="box_inside_grid">
+                    <div class="box_group">
+                        <div class="roomTitle">
+                            <span>nome da sala</span>                            
+                        </div>
+                        <div class="group">
+                            <div class="UserOptions" id="UserOptions">
+                                <i class='bx bx-user bx-sm'></i>
+                            </div>
+                            <ul class="options">
+                                <li>Criar Sala <i class='bx bx-message-square-add'></i></li>
+                                <li>Entrar na Sala <i class='bx bxs-group' ></i></li>
+                                <li>Sair <i class='bx bx-log-out'></i> </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="messages">
+                            <div class="box_messages" id="box_messages">
+                                <!-- As mensagens serão exibidas aqui -->
+                            </div>
+                    </div>
+                    <div class="box_textbar">
+                        <input type="text" name="messageInput" id="messageInput" placeholder="Digite uma mensagem">
+                        <button type="button" id="bttSendMessage">Enviar</button>
                     </div>
                 </div>
-                <div class="box_textbar">
-                    <input type="text" name="messageInput" id="messageInput" placeholder="Digite uma mensagem">
-                    <button type="button" id="bttSendMessage">Enviar</button>
-                </div>
             </div>
-        </div>
     </div>
 </body>
+
 </html>
