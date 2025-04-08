@@ -4,9 +4,14 @@ $(document).ready(function () {
     const bttNewRoom = $('#bttNewRoom');
     const formNewRoom = $('#box_room');
     const messageInput = $('#messageInput');
-    const messageBox = $('#box_messages');
+    const messageFather = $('#messages');
+    const messageSon = $('#box_messages');
     const roomInput = $('#roomName');
     const roomBox = $('#opened_rooms');
+    const bttprofile = $('#userProfile');
+
+
+    // Socket Conection
 
     let socket = null;
 
@@ -19,47 +24,7 @@ $(document).ready(function () {
         });
     }());
 
-    socket.on("connect", () => {
-        loadJoinedRooms()
-    });
-
-    function loadJoinedRooms() {
-        socket.emit("restore_rooms", currentUser.id);
-    }
-
-    socket.on("joined_rooms", (rooms) => {
-        roomBox.find('.room').detach();
-        rooms.forEach((room) => setRoom(room))
-    });
-
-    function setRoom(data) {
-        const room = $(`
-            <div class="room" id="room">
-                <span class=roomName></span>
-                <span class="roomId"></span>
-            </div>
-        `);
-
-        room.find('span.roomName').text(data.name);
-        room.find('span.roomId').text(data.id);
-        roomBox.append(room);
-    }
-
-    roomBox.on('click', '.room', (e) => {
-        const roomId = $(e.target).closest('.room').find('span.roomId').text();
-        currentRoom = roomId;
-        socket.emit('load_room_messages', roomId);
-    });
-
-    socket.on('return_room_messages', (data) => {
-        messageBox.find('.message').detach();
-        data.forEach((message) => showMessageInScreen(message));
-        scrollToBottom();
-    });
-
-    function scrollToBottom() {
-        messageBox.scrollTop(messageBox[0].scrollHeight);
-    }
+    // User Authentication
 
     (async function authenticateUser() {
         try {
@@ -98,13 +63,15 @@ $(document).ready(function () {
         }
     }
 
-    async function fetchWithAuth(url, auth) {
-        return await axios.post(`http://192.168.0.4:3000${url}`, {}, { headers: { Authorization: `Bearer ${auth}` } });
+    async function fetchWithAuth(url,body={}, auth) {
+        return await axios.post(`http://192.168.0.4:3000${url}`, body, { headers: { Authorization: `Bearer ${auth}` } });
     }
 
     function handleLoginRedirect() {
         window.location.href = '/login'
     }
+
+    // Interactivity
 
     bttjoinRoom.on("click", joinRoom);
 
@@ -135,7 +102,63 @@ $(document).ready(function () {
         );
 
         messageElement.find('div.message_data  span').text(message);
-        messageBox.append(messageElement);
+        messageSon.append(messageElement);
+    }
+
+    socket.on("connect", () => {
+        loadJoinedRooms()
+    });
+
+    function loadJoinedRooms() {
+        socket.emit("restore_rooms", currentUser.id);
+    }
+
+    socket.on("joined_rooms", (rooms) => {
+        roomBox.find('.room').detach();
+        rooms.forEach((room) => setRoom(room))
+    });
+
+    function setRoom(data) {
+        const room = $(`
+            <div class="room" id="room">
+                <span class=roomName></span>
+                <span class="roomId"></span>
+            </div>
+        `);
+
+        room.find('span.roomName').text(data.name);
+        room.find('span.roomId').text(data.id);
+        roomBox.append(room);
+    }
+
+    roomBox.on('click', '.room', (e) => {
+        const roomId = $(e.target).closest('.room').find('span.roomId').text();
+        currentRoom = roomId;
+        socket.emit('load_room_messages', roomId);
+        boxMessagesOn();
+    });
+
+
+    socket.on('return_room_messages', (data) => {
+        messageSon.find('.message').detach();
+        data.forEach((message) => showMessageInScreen(message));
+        scrollToBottom();
+    });
+
+    function boxMessagesOn() {
+        if (!messageFather.is(':visible')) {
+            messageFather.show();
+        }
+    }
+    
+    function boxMessagesOff() {
+        if (messageFather.is(':visible')) {
+            messageFather.hide();
+        }
+    }
+
+    function scrollToBottom() {
+        messageSon.scrollTop(messageSon[0].scrollHeight);
     }
 
     messageInput.on('keydown', (e) => {
@@ -196,7 +219,7 @@ $(document).ready(function () {
         messageElement.find('div.message_data .content span').text(data.message);
         messageElement.find('div.message_data .content .time span').text(data.time);
 
-        messageBox.append(messageElement)
+        messageSon.append(messageElement)
         scrollToBottom();
     }
 
@@ -217,6 +240,7 @@ $(document).ready(function () {
             formNewRoom.css('animation', 'fadeInRoomForm 0.3s ease');
         }
     }
+
     $('.UserOptions').on("click", function () {
         $(this).next('.options').toggle();
     });
@@ -228,6 +252,11 @@ $(document).ready(function () {
         }
     });
 
+    bttprofile.on("click", setUserData);
 
+    async function setUserData(){
+        boxMessagesOff();
+        const response = await fetchWithAuth(`/user/getUser/`,token);
+    }
 });
 

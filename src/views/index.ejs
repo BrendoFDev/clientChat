@@ -28,28 +28,24 @@
                 <div class="box_inside_grid">
                     <div class="box_group">
                         <div class="roomTitle">
-                            <span>nome da sala</span>                            
+                            <span><strong>nome da sala</strong></span>
                         </div>
                         <div class="group">
                             <div class="UserOptions" id="UserOptions">
-                                <i class='bx bx-user bx-sm'></i>
+
                             </div>
                             <ul class="options">
-                                <li>Criar Sala <i class='bx bx-message-square-add'></i></li>
-                                <li>Entrar na Sala <i class='bx bxs-group' ></i></li>
-                                <li>Sair <i class='bx bx-log-out'></i> </li>
+                                <li id="userProfile">Perfil <i class='bx bx-user-circle'></i></i></li>
+                                <li id="createRoom">Criar Sala <i class='bx bx-message-square-add'></i></li>
+                                <li id="JoinRoom">Entrar na Sala <i class='bx bxs-group'></i></li>
+                                <li id="logOut">Sair <i class='bx bx-log-out'></i> </li>
                             </ul>
                         </div>
                     </div>
-                    <div class="messages">
-                            <div class="box_messages" id="box_messages">
-                                <!-- As mensagens serão exibidas aqui -->
-                            </div>
-                    </div>
-                    <div class="box_textbar">
-                        <input type="text" name="messageInput" id="messageInput" placeholder="Digite uma mensagem">
-                        <button type="button" id="bttSendMessage">Enviar</button>
-                    </div>
+
+                    <%- include('includes/MessageBox'); -%>
+                    <%- include('includes/Profile'); -%>
+                    
                 </div>
             </div>
     </div>
