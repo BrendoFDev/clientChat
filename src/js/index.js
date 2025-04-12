@@ -1,4 +1,4 @@
-$(document).ready(function () {
+jQuery(function () {
     const bttjoinRoom = $('#bttJoinRoom');
     const bttSendMessage = $('#bttSendMessage');
     const bttNewRoom = $('#bttNewRoom');
@@ -9,7 +9,8 @@ $(document).ready(function () {
     const roomInput = $('#roomName');
     const roomBox = $('#opened_rooms');
     const bttprofile = $('#userProfile');
-
+    const formProfile = $('#box_profile');
+    const bttLogOut = $('#logOut');
 
     // Socket Conection
 
@@ -19,7 +20,7 @@ $(document).ready(function () {
     let currentRoom = null;
 
     (function connectSocket() {
-        socket = io('ws://192.168.0.4:3000', {
+        socket = io('ws://192.168.0.3:3000', {
             transports: ["websocket"]
         });
     }());
@@ -64,7 +65,7 @@ $(document).ready(function () {
     }
 
     async function fetchWithAuth(url,body={}, auth) {
-        return await axios.post(`http://192.168.0.4:3000${url}`, body, { headers: { Authorization: `Bearer ${auth}` } });
+        return await axios.post(`http://192.168.0.3:3000${url}`, body, { headers: { Authorization: `Bearer ${auth}` } });
     }
 
     function handleLoginRedirect() {
@@ -133,11 +134,29 @@ $(document).ready(function () {
 
     roomBox.on('click', '.room', (e) => {
         const roomId = $(e.target).closest('.room').find('span.roomId').text();
+        const roomName = $(e.target).closest('.room').find('span.roomName').text();
+        $('.roomTitle span').text(roomName);
+
+        showRoomName();
+        hideUserProfile();
+
         currentRoom = roomId;
         socket.emit('load_room_messages', roomId);
-        boxMessagesOn();
+        showMessageBox();
     });
 
+    function showRoomName(){
+        console.log()
+        if(!$('.roomTitle span').is(':visible')){
+            $('.roomTitle span').show();
+        }
+    }
+
+    function hideRoomName(){
+        if($('.roomTitle span').is(':visible')){
+            $('.roomTitle span').hide();
+        }
+    }
 
     socket.on('return_room_messages', (data) => {
         messageSon.find('.message').detach();
@@ -145,13 +164,13 @@ $(document).ready(function () {
         scrollToBottom();
     });
 
-    function boxMessagesOn() {
+    function showMessageBox() {
         if (!messageFather.is(':visible')) {
             messageFather.show();
         }
     }
     
-    function boxMessagesOff() {
+    function hiddeMessageBox() {
         if (messageFather.is(':visible')) {
             messageFather.hide();
         }
@@ -161,18 +180,14 @@ $(document).ready(function () {
         messageSon.scrollTop(messageSon[0].scrollHeight);
     }
 
-    messageInput.on('keydown', (e) => {
-        if (e.key == "Enter") {
-            sendMessage();
-        }
-    });
+    messageInput.on('keydown', (e) => { if (e.key == "Enter") sendMessage(e) });
 
     bttSendMessage.on("click", sendMessage);
 
-    function sendMessage() {
+    function sendMessage(e) {
         try {
 
-            event.preventDefault();
+            e.preventDefault();
 
             let message = messageInput.val().trim();
             let roomId = currentRoom;
@@ -252,11 +267,24 @@ $(document).ready(function () {
         }
     });
 
-    bttprofile.on("click", setUserData);
+    bttLogOut.on('click', logOut);
 
-    async function setUserData(){
-        boxMessagesOff();
-        const response = await fetchWithAuth(`/user/getUser/`,token);
+    function logOut(){
+        localStorage.clear();
+        window.location.href = '../login'
     }
+
+    bttprofile.on("click", showUserInfo);
+
+    async function showUserInfo(){
+        hiddeMessageBox();
+        hideRoomName();
+        showUserProfile();
+        
+    }
+    
+    function showUserProfile(){ if(!formProfile.is(':visible'))formProfile.show(); }
+    function hideUserProfile(){ if(formProfile.is(':visible') )formProfile.hide(); }
+
 });
 

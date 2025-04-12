@@ -13,7 +13,7 @@ $(document).ready(function(){
     async function login(){
         try{
                 
-            const response = await axios.post('http://192.168.0.4:3000/user/login',{
+            const response = await axios.post('http://192.168.0.3:3000/user/login',{
                 email: userEmail.val(),
                 password: userPassword.val()
             });
