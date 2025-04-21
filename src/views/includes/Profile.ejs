@@ -1,7 +1,16 @@
 <div class="box_profile" id="box_profile">
     <div class="box_form_profile">
         <div class="profile_photo">
-            <div class="photo"></div>
+            <div class="photo_box">
+                <div class="photo"></div>
+                <div class="camera_icon">
+                    <span><i class='bx bx-camera'></i></span>
+                </div>
+            </div>
+            <ul class="photo_options">
+                <li id="changePhoto">Trocar Foto</li>
+                <li id="removePhoto">Remover Foto</li>
+            </ul>
         </div>
         <div class="box_fild">
             <div class="label">
@@ -16,9 +25,6 @@
             </div>
             <input type="text" id="email" class="userInfoInput" disabled />
             <button type="button">Alterar Email</button>
-        </div>
-        <div class="box_fild">
-              <button type="button">Alterar Senha</button>
         </div>
         <button type="button">Salvar</button>
     </div>

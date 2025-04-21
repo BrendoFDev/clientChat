@@ -1,0 +1,80 @@
+.box_photo_form {
+    width: 300px;
+    padding: 10px;
+    display: none;
+    flex-direction: column;
+    gap: 30px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+button#closeChangePhoto {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    padding: 10;
+}
+
+.top_bar_options {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.input_wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.input_wrapper .btt_search_file>label {
+    background-color: #007bff;
+    color: white;
+    width: fit-content;
+    padding: 10px;
+    border-radius: 10px;
+    transition: 0.3s ease;
+}
+
+.btt_search_file>label:hover {
+    box-shadow: 1px 1px 5px grey;
+    background-color: #0056b3;
+    cursor: pointer;
+}
+
+.input_wrapper input[type=file] {
+    display: none;
+}
+
+.photo_preview .photo_box {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 200px;
+}
+
+.photo_preview .photo_box .photo {
+    background-color: wheat;
+    height: 200px;
+    width: 200px;
+    border-radius: 200px;
+    cursor: pointer;
+}
+
+.submitButton {
+    display: flex;
+    justify-content: flex-end;
+    align-items: end;
+}
+
+.submitButton button {
+    font-size: 15px;
+    transition: 0.3s ease;
+}
+
+.submitButton button:hover {
+    box-shadow: 1px 1px 5px grey;
+}

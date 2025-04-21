@@ -22,20 +22,54 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     overflow: visible;
 }
-.roomTitle span{
-    display: none; 
+
+/* 1 faz parte dos formulários que sobrepoem a tela principal*/
+
+.box_front_body {
+    z-index: 2000;
+    background-color: rgba(0, 0, 0, 0.527);
+    position: fixed;
+    top: 0%;
+    left: 0%;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+}
+
+.box_aligner {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.set_change_photo {
+    display: none;
+}
+
+.set_remove_photo {
+    display: none;
+}
+
+/* 1 ------------ fim ---------- */
+
+
+.roomTitle span {
+    display: none;
     font-weight: bold;
 }
 
 .opened_rooms {
-    gap:5px;
+    gap: 5px;
     width: 250px;
     height: 500px;
     padding: 20px;
     overflow-y: auto;
 }
 
-.opened_rooms h3{
+.opened_rooms h3 {
     text-align: center;
 }
 
@@ -45,9 +79,9 @@ body {
     color: #333;
 }
 
-.room{
+.room {
     margin: 5px;
-    color:white;
+    color: white;
     padding: 10px;
     border-radius: 5px;
     background-color: #007bff;
@@ -60,20 +94,21 @@ body {
 
 }
 
-.room:hover{
+.room:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
-.room .roomName{
+
+.room .roomName {
     height: 10pt;
-    color:white;
+    color: white;
 }
 
-.room .roomId{
+.room .roomId {
     display: none;
     color: white;
- }
+}
 
-.roomInfo{
+.roomInfo {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -100,24 +135,25 @@ body {
 
 #box_room {
     position: fixed;
-    top: 50%; 
-    left: 50%; 
-    transform: translate(-50%, -50%); 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: white;
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    z-index: 2; 
-    display: none; 
+    z-index: 2;
+    display: none;
     animation: fadeInRoomForm 0.3s ease;
 }
 
 @keyframes fadeInRoomForm {
-    from{
+    from {
         opacity: 0;
         transform: translate(-50%, -40%);
     }
-    to{
+
+    to {
         opacity: 1;
         transform: translate(-50, -50);
     }
@@ -128,6 +164,7 @@ body {
         opacity: 1;
         transform: translate(-50%, -50%);
     }
+
     to {
         opacity: 0;
         transform: translate(-50%, -40%);
@@ -154,29 +191,28 @@ body {
     border-color: #007bff;
 }
 
-.box_group{
-    position:relative;
+.box_group {
+    position: relative;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
 }
 
-.group{
+.group {
     position: relative;
     display: inline-block;
     font-size: 0;
-    vertical-align:middle;
+    vertical-align: middle;
 }
 
 
 .group {
     margin-right: 40px;
-   
 }
 
 
-.group > .options {
+.group>.options {
     list-style-type: none;
     z-index: 1000;
     display: none;
@@ -191,46 +227,48 @@ body {
     border: 1px solid #ccc;
     background-color: #fff;
     border-radius: 10px;
-  }
+}
 
-  .group > .options li{
+.group>.options li {
     display: block;
     padding: 3px 12px;
     text-decoration: none;
     transition: 0.2s;
     border-radius: 10px;
     margin: 5px;
-  }
+}
 
-  .options li:hover{
-    color:white;
+.options li:hover {
+    color: white;
     cursor: pointer;
     background-color: #333;
-  }
+}
 
-  .options li#logOut:hover{
+.options li#logOut:hover {
     background-color: firebrick;
     color: white;
-  }
+}
 
 
 .box_group .UserOptions {
     padding: 10px;
-    background-color: #007bff;
+    background-color: wheat;
     color: white;
     height: 30px;
     width: 30px;
     border-radius: 100px;
     cursor: pointer;
     transition: 0.3s ease;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .box_group .UserOptions:hover {
-    background-color: #0056b3;
-    box-shadow: 1px 1px 10px #0056b3;
+    box-shadow: 1px 1px 10px grey;
 }
 
-.box_group .roomTitle{
+.box_group .roomTitle {
     flex: 1;
     text-align: center;
     font-size: 20px;
@@ -250,7 +288,7 @@ body {
     background-color: #0056b3;
 }
 
-.messages{
+.messages {
     display: none;
     flex-direction: column;
 }
@@ -270,7 +308,7 @@ body {
     display: flex;
     flex-direction: column;
     padding: 10px;
-    margin:10px;
+    margin: 10px;
     background: #f1f3f4;
     border-radius: 8px;
     max-width: 70%;
@@ -342,6 +380,7 @@ body {
         opacity: 0;
         transform: translateY(10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);

@@ -7,22 +7,25 @@
 
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/profile.css">
+    <link rel="stylesheet" href="css/changePhoto.css">
+    <link rel="stylesheet" href="css/removePhoto.css">
 
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
     <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script src="js/index.js"></script>
-    <script type="module" src="../config/urlConfig.js"></script>
+    <script src="js/profile.js"></script>
+    <script src="js/changePhoto.js"></script>
+    <script src="js/removePhoto.js"></script>
 
     <title>Chat ao Vivo</title>
 </head>
 
 <body>
     <div class="box-body">
-
         <%- include('includes/OpenedRooms') -%>
 
             <div class="box_out_grid">
@@ -33,22 +36,28 @@
                         </div>
                         <div class="group">
                             <div class="UserOptions" id="UserOptions">
-
                             </div>
                             <ul class="options">
-                                <li id="userProfile">Perfil <i class='bx bx-user-circle'></i></i></li>
+                                <li id="userProfile">Perfil <i class='bx bx-user-circle'></i></li>
                                 <li id="createRoom">Criar Sala <i class='bx bx-message-square-add'></i></li>
                                 <li id="JoinRoom">Entrar na Sala <i class='bx bxs-group'></i></li>
-                                <li id="logOut">Sair <i class='bx bx-log-out'></i> </li>
+                                <li id="logOut">Sair <i class='bx bx-log-out'></i></li>
                             </ul>
                         </div>
                     </div>
 
                     <%- include('includes/MessageBox'); -%>
-                    <%- include('includes/Profile'); -%>
-                    
+                        <%- include('includes/Profile'); -%>
+
                 </div>
             </div>
+    </div>
+
+    <div class="box_front_body">
+        <div class="box_aligner">
+            <%- include('includes/ChangePhoto') -%>
+                <%- include('includes/RemovePhoto') -%>
+        </div>
     </div>
 </body>
 

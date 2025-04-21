@@ -1,0 +1,30 @@
+.box_remove_photo {
+    width: fit-content;
+    padding: 20px;
+    display: none;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 10px;
+    font-size: 20px;
+}
+
+.top_bar_options {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.span_question {
+    margin: 20px 0px 20px 0px;
+}
+
+.choice_buttons {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    gap: 40px;
+}
+
+.choice_buttons button {
+    font-size: 20px;
+}

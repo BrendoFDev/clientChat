@@ -20,7 +20,7 @@ jQuery(function () {
     let currentRoom = null;
 
     (function connectSocket() {
-        socket = io('ws://192.168.0.3:3000', {
+        socket = io('ws://192.168.0.5:3000', {
             transports: ["websocket"]
         });
     }());
@@ -49,6 +49,26 @@ jQuery(function () {
         }
     }());
 
+    // Carregando foto de perfil do usuário
+
+    $(() => loadUserPhoto());
+
+    function loadUserPhoto() {
+        try {
+            const imageUrl = `http://192.168.0.5:3000/images/${encodeURIComponent(currentUser.photo)}`;
+            if (currentUser?.photo) {
+                $('#UserOptions').css('background-image', `url(${imageUrl})`);
+                $('.photo').css('background-image', `url(${imageUrl})`);
+            } else {
+                console.warn('Usuário sem foto definida.');
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
+    //-----------------------------------
     async function tryRefreshAccessToken() {
         try {
             const refresh = localStorage.getItem('refresh');
@@ -64,8 +84,8 @@ jQuery(function () {
         }
     }
 
-    async function fetchWithAuth(url,body={}, auth) {
-        return await axios.post(`http://192.168.0.3:3000${url}`, body, { headers: { Authorization: `Bearer ${auth}` } });
+    async function fetchWithAuth(url, body = {}, auth) {
+        return await axios.post(`http://192.168.0.5:3000${url}`, body, { headers: { Authorization: `Bearer ${auth}` } });
     }
 
     function handleLoginRedirect() {
@@ -145,15 +165,15 @@ jQuery(function () {
         showMessageBox();
     });
 
-    function showRoomName(){
+    function showRoomName() {
         console.log()
-        if(!$('.roomTitle span').is(':visible')){
+        if (!$('.roomTitle span').is(':visible')) {
             $('.roomTitle span').show();
         }
     }
 
-    function hideRoomName(){
-        if($('.roomTitle span').is(':visible')){
+    function hideRoomName() {
+        if ($('.roomTitle span').is(':visible')) {
             $('.roomTitle span').hide();
         }
     }
@@ -169,7 +189,7 @@ jQuery(function () {
             messageFather.show();
         }
     }
-    
+
     function hiddeMessageBox() {
         if (messageFather.is(':visible')) {
             messageFather.hide();
@@ -269,22 +289,30 @@ jQuery(function () {
 
     bttLogOut.on('click', logOut);
 
-    function logOut(){
+    function logOut() {
         localStorage.clear();
         window.location.href = '../login'
     }
 
     bttprofile.on("click", showUserInfo);
 
-    async function showUserInfo(){
+    async function showUserInfo() {
         hiddeMessageBox();
         hideRoomName();
         showUserProfile();
-        
+        setUserInfo();
     }
-    
-    function showUserProfile(){ if(!formProfile.is(':visible'))formProfile.show(); }
-    function hideUserProfile(){ if(formProfile.is(':visible') )formProfile.hide(); }
+
+    function setUserInfo() {
+        const userName = $('.box_form_profile #name');
+        const userEmail = $('.box_form_profile #email');
+
+        userName.val(currentUser.name);
+        userEmail.val(currentUser.email);
+    }
+
+    function showUserProfile() { if (!formProfile.is(':visible')) formProfile.show(); }
+    function hideUserProfile() { if (formProfile.is(':visible')) formProfile.hide(); }
 
 });
 
