@@ -64,6 +64,13 @@ button#closeChangePhoto {
     cursor: pointer;
 }
 
+.photo {
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
 .submitButton {
     display: flex;
     justify-content: flex-end;

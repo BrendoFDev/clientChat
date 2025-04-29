@@ -33,7 +33,7 @@ jQuery(function () {
 
             if (!token) handleLoginRedirect();
 
-            const response = await fetchWithAuth('/access/authenticate', token);
+            const response = await fetchWithAuth('/access/authenticate', {}, token);
 
             if (response?.data?.logged) return;
 
@@ -55,8 +55,10 @@ jQuery(function () {
 
     function loadUserPhoto() {
         try {
-            const imageUrl = `http://192.168.0.5:3000/images/${encodeURIComponent(currentUser.photo)}`;
-            if (currentUser?.photo) {
+            const photo = JSON.parse(localStorage.getItem('photo'));
+            const imageUrl = `http://192.168.0.5:3000/images/user/${encodeURIComponent(photo.fileName)}`;
+            console.log(imageUrl);
+            if (photo) {
                 $('#UserOptions').css('background-image', `url(${imageUrl})`);
                 $('.photo').css('background-image', `url(${imageUrl})`);
             } else {
@@ -69,12 +71,13 @@ jQuery(function () {
     }
 
     //-----------------------------------
+
     async function tryRefreshAccessToken() {
         try {
             const refresh = localStorage.getItem('refresh');
             if (!refresh) return null
 
-            const response = await fetchWithAuth('/access/refreshToken', refresh);
+            const response = await fetchWithAuth('/access/refreshToken', {}, refresh);
 
             return response?.data?.toked || null;
 
@@ -85,7 +88,7 @@ jQuery(function () {
     }
 
     async function fetchWithAuth(url, body = {}, auth) {
-        return await axios.post(`http://192.168.0.5:3000${url}`, body, { headers: { Authorization: `Bearer ${auth}` } });
+        return await axios.post(`http://192.168.0.5:3000${url}`, body.formData, { headers: { Authorization: `Bearer ${auth}` } });
     }
 
     function handleLoginRedirect() {
@@ -119,7 +122,7 @@ jQuery(function () {
                         <span></span>
                     </div>
                 </div>
-            `
+                `
         );
 
         messageElement.find('div.message_data  span').text(message);

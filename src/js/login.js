@@ -31,10 +31,12 @@ $(document).ready(function () {
             const token = response.data.token;
             const refresh = response.data.refresh;
             const user = response.data.user;
+            const photo = response.data.photo;
 
             localStorage.setItem('token', token);
             localStorage.setItem('refresh', refresh);
             localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('photo', JSON.stringify(photo));
             window.location.href = '/index'
 
         }
