@@ -45,6 +45,7 @@ jQuery(async function () {
             const formData = new FormData();
             const file = photoInput[0].files[0];
             const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
 
             if (!file) {
                 alert('Escolha um arquivo antes de salvar');
@@ -52,13 +53,14 @@ jQuery(async function () {
             }
 
             formData.append('userPhoto', file);
+            formData.append('user', user);
 
-            const response = await fetchWithAuth('/photo/user/update', formData, token);
+            const response = await getWithUrl('/photo/user/update', formData, token);
 
             if (response.status === 201) {
-                const photo = response.data;
-                localStorage.setItem('photo', JSON.stringify(photo));
-                loadUserPhoto(photo);
+                const user = response.data;
+                localStorage.setItem('user', JSON.stringify(user));
+                loadUserPhoto(user.photo);
             }
         }
         catch (e) {
@@ -66,7 +68,7 @@ jQuery(async function () {
         }
     }
 
-    async function fetchWithAuth(url, body = {}, auth) {
+    async function getWithUrl(url, body = {}, auth) {
         return await axios.put(`http://192.168.0.5:3000${url}`, body, { headers: { Authorization: `Bearer ${auth}` } });
     }
 
@@ -80,4 +82,5 @@ jQuery(async function () {
             console.log(err);
         }
     }
+
 });

@@ -33,7 +33,7 @@ jQuery(function () {
 
             if (!token) handleLoginRedirect();
 
-            const response = await fetchWithAuth('/access/authenticate', {}, token);
+            const response = await getWithAuth('/access/authenticate', {}, token);
 
             if (response?.data?.logged) return;
 
@@ -49,15 +49,30 @@ jQuery(function () {
         }
     }());
 
+    async function tryRefreshAccessToken() {
+        try {
+            console.log("Tentando atualizar o token de acesso...");
+
+            const refresh = localStorage.getItem('refresh');
+            if (!refresh) return null
+
+            const response = await getWithAuth('/access/refreshToken', {}, refresh);
+
+            return response?.data?.toked || null;
+
+        } catch (err) {
+            console.log(err);
+            return null;
+        }
+    }
+
     // Carregando foto de perfil do usuário
 
     $(() => loadUserPhoto());
 
     function loadUserPhoto() {
         try {
-            const photo = JSON.parse(localStorage.getItem('photo'));
-            const imageUrl = `http://192.168.0.5:3000/images/user/${encodeURIComponent(photo.fileName)}`;
-            console.log(imageUrl);
+            const imageUrl = `http://192.168.0.5:3000/images/user/${encodeURIComponent(currentUser.photo.fileName)}`;
             if (photo) {
                 $('#UserOptions').css('background-image', `url(${imageUrl})`);
                 $('.photo').css('background-image', `url(${imageUrl})`);
@@ -72,22 +87,8 @@ jQuery(function () {
 
     //-----------------------------------
 
-    async function tryRefreshAccessToken() {
-        try {
-            const refresh = localStorage.getItem('refresh');
-            if (!refresh) return null
 
-            const response = await fetchWithAuth('/access/refreshToken', {}, refresh);
-
-            return response?.data?.toked || null;
-
-        } catch (err) {
-            console.log(err);
-            return null;
-        }
-    }
-
-    async function fetchWithAuth(url, body = {}, auth) {
+    async function getWithAuth(url, body = {}, auth) {
         return await axios.post(`http://192.168.0.5:3000${url}`, body.formData, { headers: { Authorization: `Bearer ${auth}` } });
     }
 
