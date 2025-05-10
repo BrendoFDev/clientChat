@@ -51,8 +51,6 @@ jQuery(function () {
 
     async function tryRefreshAccessToken() {
         try {
-            console.log("Tentando atualizar o token de acesso...");
-
             const refresh = localStorage.getItem('refresh');
             if (!refresh) return null
 
@@ -72,7 +70,7 @@ jQuery(function () {
 
     function loadUserPhoto() {
         try {
-            const imageUrl = `http://192.168.0.5:3000/images/user/${encodeURIComponent(currentUser.photo.fileName)}`;
+            const imageUrl = `http://192.168.0.5:3000/images/user/${encodeURIComponent(currentUser.Photo.fileName)}`;
             if (photo) {
                 $('#UserOptions').css('background-image', `url(${imageUrl})`);
                 $('.photo').css('background-image', `url(${imageUrl})`);
@@ -170,7 +168,6 @@ jQuery(function () {
     });
 
     function showRoomName() {
-        console.log()
         if (!$('.roomTitle span').is(':visible')) {
             $('.roomTitle span').show();
         }
@@ -228,7 +225,6 @@ jQuery(function () {
 
     socket.on('receive_message', (data) => {
         try {
-            console.log(data)
             showMessageInScreen(data)
         }
         catch (err) {

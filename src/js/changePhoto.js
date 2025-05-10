@@ -45,7 +45,6 @@ jQuery(async function () {
             const formData = new FormData();
             const file = photoInput[0].files[0];
             const token = localStorage.getItem('token');
-            const user = localStorage.getItem('user');
 
             if (!file) {
                 alert('Escolha um arquivo antes de salvar');
@@ -53,14 +52,13 @@ jQuery(async function () {
             }
 
             formData.append('userPhoto', file);
-            formData.append('user', user);
 
             const response = await getWithUrl('/photo/user/update', formData, token);
 
             if (response.status === 201) {
                 const user = response.data;
                 localStorage.setItem('user', JSON.stringify(user));
-                loadUserPhoto(user.photo);
+                loadUserPhoto(user.Photo);
             }
         }
         catch (e) {

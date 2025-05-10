@@ -1,7 +1,7 @@
 jQuery(function () {
     const bttCloseRemovePhoto = $('#closeRemovePhoto');
     const bttYes = $('#bttYes');
-    const bttNo = $('#bttno');
+    const bttNo = $('#bttNo');
 
     bttCloseRemovePhoto.on('click', () => {
         hideRemovePhoto();
@@ -19,6 +19,11 @@ jQuery(function () {
             $('.box_remove_photo').hide();
         }
     }
+
+    bttNo.on('click', () => {
+        hideRemovePhoto();
+        unsetFrontBody();
+    });
 
     bttYes.on('click', handleRemoveClick);
 
