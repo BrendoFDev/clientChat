@@ -3,6 +3,7 @@ jQuery(function () {
     const bttChangePhoto = $('#changePhoto');
     const bttRemovePhoto = $('#removePhoto');
     const bttSaveInfo = $('#bttSaveInfo');
+    const bttSaveEmail = $('#bttSaveEmail');
 
     photoBox.on("click", function (e) {
         $(this).next('.photo_options').toggle();
@@ -69,11 +70,30 @@ jQuery(function () {
 
     function handleSaveResponse(response) {
         if (response.status === 200) {
-            console.log(response)
             localStorage.setItem('user', JSON.stringify(response.data.user));
             alert("Dados atualizados com sucesso!");
         } else
             alert("Não foi possível atualizar os dados!");
     }
 
+    bttSaveEmail.on('click', saveUserEmail);
+
+    async function saveUserEmail() {
+        try {
+
+            const token = localStorage.getItem('token');
+            const email = 'mr027738@gmail.com';
+
+            const response = await postWithAuth('/email/authenticate', { email: email }, token)
+            console.log(response);
+
+        }
+        catch (error) {
+            console.error("Error saving user email:", error);
+        }
+    }
+
+    async function postWithAuth(url, body = {}, auth) {
+        return await axios.post(`http://192.168.0.5:3000${url}`, body, { headers: { Authorization: `Bearer ${auth}` } });
+    }
 });
